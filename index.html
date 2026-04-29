@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>西艺设计 · XiYi Studio · 2023-2026</title>
+<meta name="description" content="西藏拉萨设计工作室 — 古老藏文化与当代设计语言的相遇">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Serif+Tibetan:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ========================================== */
+/* 西艺设计 · XiYi Studio · 整站样式            */
+/* ========================================== */
+
+:root{
+  --black:#0a0a0a;
+  --ink:#141414;
+  --paper:#f4f1ea;
+  --red:#d7502a;
+  --green:#1a7d48;
+  --yellow:#e8d542;
+  --muted:rgba(244,241,234,0.55);
+  --border:rgba(244,241,234,0.12);
+  --book-bg:#080808;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{
+  background:var(--black);
+  color:var(--paper);
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+body{
+  font-family:'Noto Serif SC','Cormorant Garamond',serif;
+  font-weight:300;
+  line-height:1.6;
+  min-height:100vh;
+  position:relative;
+}
+
+/* ============ 顶部品牌栏 ============ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  background:linear-gradient(to bottom, rgba(10,10,10,0.92), rgba(10,10,10,0.5) 70%, transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform 0.4s ease, background 0.4s ease;
+}
+.topbar.hidden{transform:translateY(-100%);}
+.topbar-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Cormorant Garamond',serif;}
+.brand-stripes{display:inline-flex;height:14px;}
+.brand-stripes span{width:3px;height:100%;}
+.brand-stripes span:nth-child(1){background:var(--red);}
+.brand-stripes span:nth-child(2){background:var(--green);}
+.brand-stripes span:nth-child(3){background:var(--yellow);}
+.brand-name{
+  font-size:13px;letter-spacing:0.2em;font-weight:600;color:var(--paper);
+}
+.brand-sep{color:var(--muted);font-size:12px;}
+.brand-chap{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:11px;letter-spacing:0.1em;color:var(--muted);
+  transition:color 0.4s ease;
+}
+
+.lang-switch{
+  display:flex;gap:2px;
+  font-family:'Inter',sans-serif;
+  font-size:10px;letter-spacing:0.15em;
+  background:rgba(244,241,234,0.05);
+  border:1px solid var(--border);
+  border-radius:20px;padding:3px;
+}
+.lang-switch button{
+  background:transparent;border:none;color:var(--muted);
+  padding:5px 10px;border-radius:18px;cursor:pointer;
+  font-family:inherit;font-size:inherit;letter-spacing:inherit;
+  transition:all 0.4s cubic-bezier(.22,.61,.36,1);
+}
+.lang-switch button.active{background:var(--paper);color:var(--black);}
+
+/* 顶部细线进度 */
+.topbar-progress{
+  position:absolute;left:0;right:0;bottom:0;
+  height:2px;background:rgba(244,241,234,0.05);
+}
+.topbar-progress-fill{
+  height:100%;
+  background:linear-gradient(to right, var(--red) 0%, var(--green) 50%, var(--yellow) 100%);
+  width:0%;transition:width 0.2s ease;
+}
+
+/* ============ 藏文待译提示带 ============ */
+.lang-notice{
+  position:fixed;top:54px;left:0;right:0;
+  text-align:center;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:11px;letter-spacing:0.15em;color:var(--yellow);
+  padding:6px 20px;
+  background:rgba(232,213,66,0.08);
+  border-bottom:1px solid rgba(232,213,66,0.15);
+  z-index:99;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease;
+}
+.lang-notice.show{opacity:1;}
+
+/* ============ 右侧章节锚点导航 ============ */
+.dot-nav{
+  position:fixed;top:50%;right:14px;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:14px;
+  z-index:90;
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+.dot-nav.show{opacity:1;}
+.dot-link{
+  display:flex;align-items:center;gap:8px;
+  text-decoration:none;
+  position:relative;
+}
+.dot-link .dot{
+  display:block;width:7px;height:7px;border-radius:50%;
+  background:rgba(244,241,234,0.25);
+  border:1px solid rgba(244,241,234,0.4);
+  transition:all 0.3s ease;
+}
+.dot-link.active .dot{
+  background:var(--paper);
+  border-color:var(--paper);
+  width:9px;height:9px;
+  box-shadow:0 0 12px rgba(244,241,234,0.4);
+}
+.dot-link .dot-label{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:10px;letter-spacing:0.2em;
+  color:var(--muted);
+  opacity:0;transform:translateX(8px);
+  transition:all 0.3s ease;
+  white-space:nowrap;
+  position:absolute;right:18px;
+  background:rgba(10,10,10,0.85);
+  padding:3px 8px;border-radius:10px;
+  pointer-events:none;
+}
+.dot-link:hover .dot-label,
+.dot-link.active .dot-label{
+  opacity:1;transform:translateX(0);
+}
+
+/* ============ 首屏 ============ */
+.hero{
+  min-height:100vh;min-height:100dvh;
+  position:relative;
+  display:flex;flex-direction:column;
+  padding:90px 26px 60px;
+  overflow:hidden;
+  z-index:2;
+}
+.cloud-bg{
+  position:absolute;inset:0;
+  opacity:0.04;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><path d='M40 100 Q40 70 70 70 Q90 50 110 70 Q140 60 140 90 Q160 90 160 110 Q160 130 140 130 L60 130 Q40 130 40 110 Z M50 110 Q50 95 65 95 Q70 85 80 90 M120 95 Q130 90 135 100 Q145 100 145 110' stroke='%23f4f1ea' fill='none' stroke-width='1.2'/></svg>");
+  background-size:280px 280px;
+  pointer-events:none;
+  animation:cloudDrift 60s linear infinite;
+}
+@keyframes cloudDrift{from{background-position:0 0;}to{background-position:280px 280px;}}
+
+.tri-stripes{
+  position:absolute;top:0;bottom:0;left:50%;
+  transform:translateX(-50%);
+  display:flex;width:36px;z-index:1;
+  opacity:0;
+  animation:stripesIn 1.4s cubic-bezier(.22,.61,.36,1) 0.3s forwards;
+}
+.tri-stripes span{flex:1;}
+.tri-stripes span:nth-child(1){background:var(--red);}
+.tri-stripes span:nth-child(2){background:var(--green);}
+.tri-stripes span:nth-child(3){background:var(--yellow);}
+@keyframes stripesIn{
+  0%{opacity:0;transform:translateX(-50%) scaleY(0);transform-origin:top;}
+  100%{opacity:1;transform:translateX(-50%) scaleY(1);}
+}
+
+.hero-content{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;
+  position:relative;z-index:2;
+}
+.eyebrow{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:13px;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:28px;
+  opacity:0;animation:fadeUp 1s ease 0.8s forwards;
+}
+.hero-title{
+  font-family:'Noto Serif SC',serif;font-weight:500;
+  font-size:clamp(48px,13vw,64px);
+  line-height:1.05;letter-spacing:0.04em;
+  margin-bottom:8px;
+}
+.hero-title .char{
+  display:inline-block;opacity:0;transform:translateY(40px);
+  animation:charIn 0.9s cubic-bezier(.22,.61,.36,1) forwards;
+}
+.hero-title .char:nth-child(1){animation-delay:0.5s;}
+.hero-title .char:nth-child(2){animation-delay:0.65s;}
+.hero-title .char:nth-child(3){animation-delay:0.8s;}
+.hero-title .char:nth-child(4){animation-delay:0.95s;}
+.hero-title .accent-r{color:var(--red);}
+.hero-title .accent-g{color:var(--green);}
+.hero-title .accent-y{color:var(--yellow);}
+@keyframes charIn{to{opacity:1;transform:translateY(0);}}
+
+.hero-en{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
+  font-size:24px;letter-spacing:0.1em;color:var(--paper);
+  margin-top:6px;margin-bottom:36px;
+  opacity:0;animation:fadeUp 1s ease 1.4s forwards;
+}
+.hero-en .reg{font-size:11px;vertical-align:super;color:var(--muted);}
+
+/* LOGO容器 */
+.owl-wrap{
+  margin:24px 0 36px;
+  height:118px;
+  display:flex;justify-content:center;align-items:center;
+  opacity:0;
+  animation:owlIn 1.2s cubic-bezier(.34,1.56,.64,1) 1.6s forwards;
+  filter:drop-shadow(0 8px 28px rgba(215,80,42,0.20));
+}
+.owl-wrap.floating{animation:owlFloat 4s ease-in-out infinite;}
+.owl-wrap svg{height:118px;width:auto;display:block;}
+@keyframes owlIn{
+  0%{opacity:0;transform:scale(0.4) rotate(-15deg);}
+  100%{opacity:1;transform:scale(1) rotate(0);}
+}
+@keyframes owlFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+}
+
+.tagline{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
+  font-size:16px;line-height:1.7;color:var(--paper);
+  max-width:340px;margin:0 auto 12px;
+  opacity:0;animation:fadeUp 1.2s ease 1.8s forwards;
+}
+.tagline-zh{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:13px;letter-spacing:0.15em;color:var(--muted);
+  max-width:300px;margin:0 auto;line-height:2;
+  opacity:0;animation:fadeUp 1.2s ease 2s forwards;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+.hero-foot{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding-top:50px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:11px;letter-spacing:0.2em;color:var(--muted);
+  text-transform:uppercase;
+  opacity:0;animation:fadeUp 1s ease 2.2s forwards;
+  position:relative;z-index:2;
+}
+.hero-foot .left{text-align:left;}
+.hero-foot .right{text-align:right;}
+.hero-foot .year{display:block;color:var(--paper);font-size:13px;letter-spacing:0.15em;margin-bottom:4px;}
+
+.scroll-hint{
+  position:absolute;bottom:24px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:10px;letter-spacing:0.3em;color:var(--muted);
+  text-transform:uppercase;
+  opacity:0;animation:fadeUp 1s ease 2.5s forwards;
+  z-index:3;
+}
+.scroll-hint .line{
+  width:1px;height:32px;
+  background:linear-gradient(to bottom,var(--paper),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%,100%{transform:scaleY(0.4);transform-origin:top;opacity:0.4;}
+  50%{transform:scaleY(1);transform-origin:top;opacity:1;}
+}
+
+/* ============ 册子主体 ============ */
+.booklet{
+  background:var(--book-bg);
+  position:relative;
+  z-index:2;
+  padding-bottom:0;
+}
+.chapter{position:relative;}
+
+/* 单页：带内边距、阴影、入场动画 */
+.page{
+  position:relative;
+  padding:30px 14px;
+  display:flex;justify-content:center;align-items:center;
+  opacity:0;
+  transform:translateY(50px) scale(0.96);
+  transition:opacity 1s cubic-bezier(.22,.61,.36,1),
+             transform 1s cubic-bezier(.22,.61,.36,1);
+}
+.page.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.page img{
+  max-width:100%;
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:2px;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.3),
+    0 24px 60px rgba(0,0,0,0.5);
+}
+
+/* 各章节之间的细分隔线 */
+.chapter + .chapter{
+  border-top:1px solid var(--border);
+}
+
+/* ============ 章节封面震撼入场页 ============ */
+.page-feature{
+  min-height:100vh;min-height:100dvh;
+  padding:0;
+  flex-direction:column;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.page-feature img{
+  width:100%;
+  max-width:100%;
+  height:auto;
+  border-radius:0;
+  box-shadow:none;
+  display:block;
+}
+
+/* feature 入场覆盖层（页面进入时全屏黑色幕布拉开） */
+.feature-overlay{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:0 30px;
+  background:#0a0a0a;
+  pointer-events:none;
+  /* 默认显示，滚到时JS加 .gone */
+}
+.page-feature.entered .feature-overlay{
+  animation:overlayOut 1.4s cubic-bezier(.7,.0,.3,1) forwards;
+}
+@keyframes overlayOut{
+  0%{opacity:1;clip-path:inset(0 0 0 0);}
+  60%{opacity:1;clip-path:inset(0 0 0 0);}
+  100%{opacity:0;clip-path:inset(50% 0 50% 0);}
+}
+
+.feature-num{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:13px;color:var(--red);
+  letter-spacing:0.3em;margin-bottom:18px;
+  opacity:0;transform:translateY(20px);
+}
+.feature-title{
+  font-family:'Noto Serif SC',serif;font-weight:600;
+  font-size:48px;line-height:1.1;letter-spacing:0.02em;
+  color:var(--paper);
+  margin-bottom:14px;
+  opacity:0;transform:translateY(30px);
+}
+.feature-en{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
+  font-size:18px;letter-spacing:0.08em;
+  color:var(--paper);
+  margin-bottom:20px;
+  opacity:0;transform:translateY(20px);
+}
+.feature-tib{
+  font-family:'Noto Serif Tibetan',serif;
+  font-size:13px;color:var(--muted);letter-spacing:0.05em;
+  opacity:0;transform:translateY(20px);
+}
+
+/* feature 进入时文字依次浮现 */
+.page-feature.entered .feature-num{animation:featureTxtIn 0.7s cubic-bezier(.22,.61,.36,1) 0.3s forwards;}
+.page-feature.entered .feature-title{animation:featureTxtIn 0.9s cubic-bezier(.22,.61,.36,1) 0.5s forwards;}
+.page-feature.entered .feature-en{animation:featureTxtIn 0.9s cubic-bezier(.22,.61,.36,1) 0.7s forwards;}
+.page-feature.entered .feature-tib{animation:featureTxtIn 0.9s cubic-bezier(.22,.61,.36,1) 0.9s forwards;}
+@keyframes featureTxtIn{
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* feature 不同色调 */
+.feature-green .feature-num{color:var(--green);}
+.feature-red .feature-num{color:var(--red);}
+.feature-light .feature-overlay{background:#f4f1ea;}
+.feature-light .feature-title,
+.feature-light .feature-en{color:#0a0a0a;}
+.feature-light .feature-tib{color:rgba(10,10,10,0.6);}
+.overlay-dark .feature-num{color:var(--red);}
+
+/* feature 内容图：进入后从中央放大，先小再到全幅 */
+.page-feature .feature-img-wrap{
+  width:100%;
+  position:relative;
+  z-index:1;
+  transform:scale(0.94);
+  opacity:0.5;
+  transition:transform 1.2s cubic-bezier(.22,.61,.36,1) 0.6s,
+             opacity 1.2s cubic-bezier(.22,.61,.36,1) 0.6s;
+}
+.page-feature.entered .feature-img-wrap,
+.page-feature.entered img{
+  /* 这里直接套到img */
+}
+.page-feature img{
+  transform:scale(1.04);
+  transition:transform 2s cubic-bezier(.22,.61,.36,1);
+  filter:brightness(0.85);
+}
+.page-feature.entered img{
+  transform:scale(1);
+  filter:brightness(1);
+}
+
+/* 封底页特殊处理 */
+.page-back{
+  min-height:80vh;
+  padding:40px 14px 80px;
+}
+.page-back img{
+  max-width:100%;
+  border-radius:2px;
+}
+
+/* ============ 底部页码 ============ */
+.page-counter{
+  position:fixed;
+  left:18px;bottom:18px;
+  z-index:90;
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;letter-spacing:0.18em;
+  color:var(--paper);
+  background:rgba(10,10,10,0.7);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:6px 12px;border-radius:14px;
+  border:1px solid var(--border);
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+.page-counter.show{opacity:1;}
+.pc-current{font-weight:500;color:var(--paper);}
+.pc-sep{color:var(--muted);margin:0 4px;}
+.pc-total{color:var(--muted);}
+
+/* ============ 结尾标记 ============ */
+.end-mark{
+  text-align:center;
+  padding:40px 26px 80px;
+  border-top:1px solid var(--border);
+  background:var(--book-bg);
+}
+.end-stripes{
+  display:inline-flex;width:60px;height:3px;
+  margin-bottom:18px;
+}
+.end-stripes span{flex:1;}
+.end-stripes span:nth-child(1){background:var(--red);}
+.end-stripes span:nth-child(2){background:var(--green);}
+.end-stripes span:nth-child(3){background:var(--yellow);}
+.end-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:11px;letter-spacing:0.3em;color:var(--muted);
+  text-transform:uppercase;line-height:2;
+}
+.end-year{color:var(--paper);font-size:13px;}
+
+/* ============ 桌面端微调 ============ */
+@media (min-width:768px){
+  .hero{padding:90px 60px 60px;}
+  .hero-title{font-size:88px;}
+  .hero-en{font-size:32px;}
+  .tagline{max-width:520px;font-size:18px;}
+  .tagline-zh{max-width:480px;}
+  .page{padding:50px 60px;}
+  .page img{max-width:1100px;}
+  .feature-overlay{padding:0 80px;}
+  .feature-title{font-size:72px;}
+  .feature-en{font-size:24px;}
+  .end-mark{padding:60px 60px 100px;}
+}
+
+@media (min-width:1200px){
+  .page{padding:60px 80px;}
+  .page img{max-width:1200px;}
+  .feature-title{font-size:88px;}
+  .dot-nav{right:30px;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ========== 顶部品牌栏 ========== -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-stripes" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+      <span class="brand-name">XIYI</span>
+      <span class="brand-sep">·</span>
+      <span class="brand-chap" id="chapName">tibet · lhasa</span>
+    </div>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="zh" class="active">中</button>
+      <button data-lang="bo">བོད་</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+  <div class="topbar-progress"><div class="topbar-progress-fill" id="topProgress"></div></div>
+</header>
+
+<!-- ========== 藏文待译提示带 ========== -->
+<div class="lang-notice" id="langNotice">
+  · Tibetan translations to be provided · 藏文待提供 ·
+</div>
+
+<!-- ========== 右侧章节锚点导航 ========== -->
+<nav class="dot-nav" aria-label="章节导航">
+  <a href="#hero" class="dot-link active" data-target="hero" title="首屏">
+    <span class="dot"></span><span class="dot-label">Hero</span>
+  </a>
+  <a href="#team" class="dot-link" data-target="team" title="团队">
+    <span class="dot"></span><span class="dot-label">团队</span>
+  </a>
+  <a href="#toc" class="dot-link" data-target="toc" title="目录">
+    <span class="dot"></span><span class="dot-label">目录</span>
+  </a>
+  <a href="#ch1" class="dot-link" data-target="ch1" title="常规设计业务">
+    <span class="dot"></span><span class="dot-label">业务</span>
+  </a>
+  <a href="#ch2" class="dot-link" data-target="ch2" title="文创制作">
+    <span class="dot"></span><span class="dot-label">文创</span>
+  </a>
+  <a href="#ch3" class="dot-link" data-target="ch3" title="联系方式">
+    <span class="dot"></span><span class="dot-label">联系</span>
+  </a>
+</nav>
+
+<!-- ========================================== -->
+<!-- ========== Section 1: 首屏 ============= -->
+<!-- ========================================== -->
+<section class="hero" id="hero">
+  <div class="cloud-bg" aria-hidden="true"></div>
+  <div class="tri-stripes" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <div class="hero-content">
+    <div class="eyebrow" data-i18n="eyebrow">TIBET · LHASA · EST. 2023</div>
+    <h1 class="hero-title">
+      <span class="char accent-r">西</span><span class="char">艺</span><span class="char accent-g">设</span><span class="char accent-y">计</span>
+    </h1>
+    <div class="hero-en">XiYi Studio<span class="reg">®</span></div>
+
+    <div class="owl-wrap" id="owlMount"></div>
+
+    <p class="tagline" data-i18n="tagline">
+      Where ancient Tibetan culture meets contemporary design vision.
+    </p>
+    <p class="tagline-zh" data-i18n="taglineZh">
+      古老的藏文化 · 与当代设计的相遇
+    </p>
+  </div>
+
+  <div class="hero-foot">
+    <div class="left">
+      <span class="year">2023 — 2026</span>
+      <span data-i18n="footLeft">tibet · lhasa</span>
+    </div>
+    <div class="right">
+      <span class="year">№ 001</span>
+      <span data-i18n="footRight">Design Studio</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span data-i18n="scroll">scroll</span>
+    <span class="line"></span>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- ========== Section 2: 册子主体 ========== -->
+<!-- ========================================== -->
+<main class="booklet">
+
+  <!-- ===== 章节 · 团队介绍 (P01-P03) ===== -->
+  <section class="chapter" id="team" data-chap-zh="团队介绍" data-chap-en="Team">
+    <!-- P01 团队震撼扉页 -->
+    <div class="page page-feature feature-dark" data-page="01">
+      <div class="feature-overlay">
+        <div class="feature-num">— TEAM</div>
+        <div class="feature-title">团队介绍</div>
+        <div class="feature-en">Our Team</div>
+        <div class="feature-tib" data-i18n="teamTib">[ 藏文待提供 ]</div>
+      </div>
+      <img loading="lazy" src="pages/p-01.jpg" alt="团队介绍">
+    </div>
+    <div class="page" data-page="02"><img loading="lazy" src="pages/p-02.jpg" alt="管理团队"></div>
+    <div class="page" data-page="03"><img loading="lazy" src="pages/p-03.jpg" alt="设计师团队"></div>
+  </section>
+
+  <!-- ===== 章节 · 目录 (P04) ===== -->
+  <section class="chapter" id="toc" data-chap-zh="目录 Content" data-chap-en="Contents">
+    <div class="page page-feature feature-light" data-page="04">
+      <div class="feature-overlay overlay-dark">
+        <div class="feature-num">— CONTENTS</div>
+        <div class="feature-title">目录</div>
+        <div class="feature-en">Contents</div>
+        <div class="feature-tib" data-i18n="tocTib">[ 藏文待提供 ]</div>
+      </div>
+      <img loading="lazy" src="pages/p-04.jpg" alt="目录">
+    </div>
+  </section>
+
+  <!-- ===== 章节 01 · 常规设计业务 (P05-P10) ===== -->
+  <section class="chapter" id="ch1" data-chap-zh="常规设计业务" data-chap-en="General Business Design">
+    <div class="page page-feature feature-green" data-page="05">
+      <div class="feature-overlay">
+        <div class="feature-num">— 01 / GENERAL</div>
+        <div class="feature-title">常规设计业务</div>
+        <div class="feature-en">General Business Design</div>
+        <div class="feature-tib" data-i18n="ch1Tib">[ 藏文待提供 ]</div>
+      </div>
+      <img loading="lazy" src="pages/p-05.jpg" alt="常规设计业务">
+    </div>
+    <div class="page" data-page="06"><img loading="lazy" src="pages/p-06.jpg" alt="平面设计"></div>
+    <div class="page" data-page="07"><img loading="lazy" src="pages/p-07.jpg" alt="三维设计"></div>
+    <div class="page" data-page="08"><img loading="lazy" src="pages/p-08.jpg" alt="品牌设计"></div>
+    <div class="page" data-page="09"><img loading="lazy" src="pages/p-09.jpg" alt="空间设计"></div>
+    <div class="page" data-page="10"><img loading="lazy" src="pages/p-10.jpg" alt="影视特效"></div>
+  </section>
+
+  <!-- ===== 章节 02 · 文创及配套设计制作项目 (P11-P26) ===== -->
+  <section class="chapter" id="ch2" data-chap-zh="文创制作" data-chap-en="Cultural Creative">
+    <div class="page page-feature feature-red" data-page="11">
+      <div class="feature-overlay">
+        <div class="feature-num">— 02 / CULTURAL</div>
+        <div class="feature-title">文创及配套<br>设计制作项目</div>
+        <div class="feature-en">Cultural Creative Products<br>& Accessories Design</div>
+        <div class="feature-tib" data-i18n="ch2Tib">[ 藏文待提供 ]</div>
+      </div>
+      <img loading="lazy" src="pages/p-11.jpg" alt="文创及配套">
+    </div>
+    <div class="page" data-page="12"><img loading="lazy" src="pages/p-12.jpg" alt="洛扎县文创研发"></div>
+    <div class="page" data-page="13"><img loading="lazy" src="pages/p-13.jpg" alt="洛扎县文创"></div>
+    <div class="page" data-page="14"><img loading="lazy" src="pages/p-14.jpg" alt="文旅基础设施"></div>
+    <div class="page" data-page="15"><img loading="lazy" src="pages/p-15.jpg" alt="G219 国之大道"></div>
+    <div class="page" data-page="16"><img loading="lazy" src="pages/p-16.jpg" alt="徒步大会"></div>
+    <div class="page" data-page="17"><img loading="lazy" src="pages/p-17.jpg" alt="县域文创"></div>
+    <div class="page" data-page="18"><img loading="lazy" src="pages/p-18.jpg" alt="案例展示"></div>
+    <div class="page" data-page="19"><img loading="lazy" src="pages/p-19.jpg" alt="蓝冰赶羊"></div>
+    <div class="page" data-page="20"><img loading="lazy" src="pages/p-20.jpg" alt="项目展示"></div>
+    <div class="page" data-page="21"><img loading="lazy" src="pages/p-21.jpg" alt="罗布林卡文创"></div>
+    <div class="page" data-page="22"><img loading="lazy" src="pages/p-22.jpg" alt="林芝区文创"></div>
+    <div class="page" data-page="23"><img loading="lazy" src="pages/p-23.jpg" alt="西区域文创"></div>
+    <div class="page" data-page="24"><img loading="lazy" src="pages/p-24.jpg" alt="文创设计"></div>
+    <div class="page" data-page="25"><img loading="lazy" src="pages/p-25.jpg" alt="其他文创"></div>
+    <div class="page" data-page="26"><img loading="lazy" src="pages/p-26.jpg" alt="案例集合"></div>
+  </section>
+
+  <!-- ===== 章节 03 · 联系方式 (P27-P29) ===== -->
+  <section class="chapter" id="ch3" data-chap-zh="联系方式" data-chap-en="Contact">
+    <div class="page page-feature feature-red" data-page="27">
+      <div class="feature-overlay">
+        <div class="feature-num">— 03 / CONTACT</div>
+        <div class="feature-title">联系方式</div>
+        <div class="feature-en">Contact Information</div>
+        <div class="feature-tib" data-i18n="ch3Tib">[ 藏文待提供 ]</div>
+      </div>
+      <img loading="lazy" src="pages/p-27.jpg" alt="联系方式">
+    </div>
+    <div class="page" data-page="28"><img loading="lazy" src="pages/p-28.jpg" alt="Contact Us"></div>
+    <div class="page" data-page="29"><img loading="lazy" src="pages/p-29.jpg" alt="战略合作"></div>
+  </section>
+
+  <!-- ===== 封底 (P30) ===== -->
+  <section class="chapter" id="back" data-chap-zh="封底" data-chap-en="Back Cover">
+    <div class="page page-back" data-page="30">
+      <img loading="lazy" src="pages/p-30.jpg" alt="封底">
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== 底部页码 ========== -->
+<div class="page-counter" id="pageCounter">
+  <span class="pc-current" id="pcCurrent">00</span>
+  <span class="pc-sep">/</span>
+  <span class="pc-total">30</span>
+</div>
+
+<!-- ========== End Mark ========== -->
+<footer class="end-mark">
+  <div class="end-stripes" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="end-text">
+    <span data-i18n="endLine1">XIYI STUDIO · TIBET · LHASA</span><br>
+    <span class="end-year">2023 — 2026</span>
+  </div>
+</footer>
+
+<script>
+const INLINE_LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="152.46 10.78 412.07 408.49">
+  <defs>
+    <style>
+      .uuid-e6358ac7-d7c9-4b42-9bcb-9d76020ea8bf {
+        fill: #090304;
+      }
+
+      .uuid-172bdc87-2ed4-4ca5-8e81-1ddba8020de7 {
+        fill: #fff;
+      }
+
+      .uuid-2929a5d6-c110-458e-aa30-bca0ef29d62e {
+        fill: #d7502a;
+      }
+
+      .uuid-b5631c6c-25a4-4cb0-880b-7db0b33d7a16 {
+        fill: #e8d542;
+      }
+
+      .uuid-5a5144c7-07ea-4b50-9b4c-f589ecfb3f9e {
+        fill: #1a7d48;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="uuid-5a5144c7-07ea-4b50-9b4c-f589ecfb3f9e" d="m506.50076,196.85646c-12.93932,12.68151-30.64111,20.52092-50.14685,20.52092-39.53394,0-71.69693-32.16299-71.69693-71.69693h-51.96889c0,39.53394-32.16299,71.69693-71.69693,71.69693-19.50574,0-37.2078-7.83941-50.14685-20.52092-6.61439,6.61425-13.66216,13.66223-21.71072,21.71072v1.46603c18.62473,18.00565,43.96802,29.10312,71.85756,29.10312,45.10944,0,83.56227-29.02403,97.68138-69.3758,14.11911,40.35176,52.57194,69.3758,97.68138,69.3758,27.88954,0,53.23283-11.09747,71.85756-29.10312v-1.46603c-8.04856-8.04849-15.0966-15.09646-21.71072-21.71072Z"/>
+    <path class="uuid-2929a5d6-c110-458e-aa30-bca0ef29d62e" d="m456.35391,42.22457c-45.10944,0-83.56227,29.02403-97.68138,69.3758-14.11911-40.35176-52.57194-69.3758-97.68138-69.3758-57.04549,0-103.45588,46.41039-103.45588,103.45588,0,29.15595,12.12766,55.5295,31.59832,74.35276v-1.46603c8.04856-8.04849,15.09633-15.09646,21.71072-21.71072-13.28607-13.02114-21.55009-31.14781-21.55009-51.17601,0-39.53394,32.16299-71.69693,71.69693-71.69693s71.69693,32.16299,71.69693,71.69693h51.96889c0-39.53394,32.16299-71.69693,71.69693-71.69693s71.69693,32.16299,71.69693,71.69693c0,20.0282-8.26429,38.15487-21.55009,51.17601,6.61412,6.61425,13.66216,13.66223,21.71072,21.71072v1.46603c19.47065-18.82326,31.59832-45.19681,31.59832-74.35276,0-57.04549-46.41039-103.45588-103.45588-103.45588Z"/>
+    <path class="uuid-2929a5d6-c110-458e-aa30-bca0ef29d62e" d="m456.35391,249.13633c-45.10944,0-83.56227-29.02403-97.68138-69.3758-14.11911,40.35176-52.57194,69.3758-97.68138,69.3758-16.55243,0-32.20795-3.90922-46.09433-10.85145,13.3483,42.16058,49.62712,75.7944,96.13674,89.67846-8.18891-19.45564-14.11363-37.6004-14.11363-48.67272,0-34.10503,27.6475-61.75259,61.75259-61.75259s61.75259,27.64757,61.75259,61.75259c0,11.07232-5.92472,29.21694-14.1139,48.67266,46.50962-13.88405,82.78844-47.51774,96.13674-89.67825-13.88611,6.94216-29.54163,10.85132-46.09406,10.85132Z"/>
+    <g>
+      <path class="uuid-e6358ac7-d7c9-4b42-9bcb-9d76020ea8bf" d="m311.02589,327.94448c.00247.0063.00493.01254.00768.01885-46.50962-13.88405-82.78844-47.51781-96.13674-89.67839-9.51096-4.75486-18.19218-10.93245-25.76323-18.25173-.41775-.40384-.82728-.8159-1.23845-1.22666,1.86398,21.58709,6.8737,45.57296,15.36359,69.15938,44.62645,62.09195,115.3256,126.619,155.4138,126.619h0c-3.7614-.00014-30.61205-46.16437-47.64664-86.64044Z"/>
+      <path class="uuid-e6358ac7-d7c9-4b42-9bcb-9d76020ea8bf" d="m358.67254,111.60036c12.589-35.97888,44.52968-62.93238,83.27938-68.35595-26.31969-16.58868-54.95948-27.24441-83.27938-27.24441s-56.95997,10.65567-83.27938,27.24434c38.74942,5.4235,70.69038,32.37708,83.27938,68.35602Z"/>
+      <path class="uuid-e6358ac7-d7c9-4b42-9bcb-9d76020ea8bf" d="m528.21148,220.03321c-7.57105,7.31935-16.25227,13.497-25.76351,18.25187-13.3483,42.16044-49.62712,75.79406-96.13646,89.67811-17.03514,40.47162-43.87811,86.6216-47.63897,86.62173,40.0882-.00014,110.78736-64.52725,155.41353-126.6192,8.49016-23.58628,13.49988-47.57195,15.36359-69.15897-.4109.41069-.82043.82269-1.23818,1.22646Z"/>
+    </g>
+    <g>
+      <ellipse class="uuid-172bdc87-2ed4-4ca5-8e81-1ddba8020de7" cx="358.67245" cy="262.44899" rx="6.73665" ry="8.9822"/>
+      <rect class="uuid-172bdc87-2ed4-4ca5-8e81-1ddba8020de7" x="351.9358" y="287.15003" width="13.47329" height="96.5586" rx="5.15645" ry="5.15645"/>
+    </g>
+    <path class="uuid-b5631c6c-25a4-4cb0-880b-7db0b33d7a16" d="m358.67254,217.53801c-34.1051,0-61.75259,27.64757-61.75259,61.75259s56.18423,135.29432,61.75259,135.29432,61.75259-101.18929,61.75259-135.29432-27.64777-61.75259-61.75259-61.75259Zm6.73665,161.01417c0,2.84778-2.3086,5.15644-5.15665,5.15644h-3.16027c-2.84778,0-5.15637-2.30866-5.15637-5.15644v-86.24572c0-2.84785,2.3086-5.15644,5.15637-5.15644h3.16027c2.84805,0,5.15665,2.3086,5.15665,5.15644v86.24572Zm-6.73665-107.121c-3.72056,0-6.73665-4.02147-6.73665-8.9822s3.01609-8.9822,6.73665-8.9822,6.73665,4.02147,6.73665,8.9822-3.01609,8.9822-6.73665,8.9822Z"/>
+    <g>
+      <path class="uuid-e6358ac7-d7c9-4b42-9bcb-9d76020ea8bf" d="m422.84272,148.01047c1.11377,16.47081,14.31815,29.89052,30.77053,31.24967,14.80645,1.22317,27.84041-7.19468,33.51868-19.64559.51696-1.13356.69614-2.40042.47055-3.6257-1.89917-10.31556-5.00211-20.20882-9.1595-29.52885-3.84995-8.63083-12.34405-14.42473-21.79449-14.47659-.06236-.00034-.12477-.00051-.18721-.00051-19.35186,0-34.946,16.39712-33.61858,36.02758Z"/>
+      <path class="uuid-e6358ac7-d7c9-4b42-9bcb-9d76020ea8bf" d="m294.50217,148.02428c-1.11377,16.47081-14.31815,29.89052-30.77053,31.24967-14.80645,1.22317-27.84041-7.19468-33.51868-19.64559-.51696-1.13356-.69614-2.40042-.47055-3.6257,1.89917-10.31556,5.00211-20.20882,9.1595-29.52885,3.84995-8.63083,12.34405-14.42473,21.79449-14.47659.06236-.00034.12477-.00051.18721-.00051,19.35186,0,34.946,16.39712,33.61857,36.02758Z"/>
+    </g>
+    <g>
+      <path class="uuid-172bdc87-2ed4-4ca5-8e81-1ddba8020de7" d="m260.99116,73.98351c-39.53394,0-71.69693,32.16299-71.69693,71.69693s32.16299,71.69693,71.69693,71.69693,71.69693-32.16299,71.69693-71.69693-32.16299-71.69693-71.69693-71.69693Zm33.51109,74.04075c-1.114,16.47081-14.31812,29.89051-30.77049,31.24964-14.80659,1.22317-27.84048-7.19469-33.51876-19.64554-.51698-1.1336-.69625-2.40042-.47066-3.62572,1.89934-10.31556,5.00232-20.20884,9.15955-29.52889,3.84994-8.63078,12.34394-14.42475,21.7946-14.47655.06222-.00034.12472-.00055.18722-.00055,19.35169,0,34.94581,16.39714,33.61854,36.0276Z"/>
+      <path class="uuid-172bdc87-2ed4-4ca5-8e81-1ddba8020de7" d="m384.65698,145.68045c0,39.53394,32.16299,71.69693,71.69693,71.69693s71.69693-32.16299,71.69693-71.69693c0-39.53394-32.16299-71.69693-71.69693-71.69693-39.53394,0-71.69693,32.16299-71.69693,71.69693Zm71.80439-33.68378c.0625,0,.125.00021.18722.00055,9.45066.05181,17.94465,5.84577,21.7946,14.47655,4.15723,9.32004,7.26021,19.21333,9.15955,29.52889.2256,1.22529.04633,2.49212-.47066,3.62572-5.67829,12.45084-18.71218,20.86871-33.51876,19.64554-16.45237-1.35913-29.65649-14.77883-30.77049-31.24964-1.32726-19.63046,14.26686-36.0276,33.61854-36.0276Z"/>
+    </g>
+  </g>
+</svg>`;
+/* ========================================== */
+/* 西艺设计 · 站点交互                          */
+/* ========================================== */
+
+(function(){
+'use strict';
+
+// ============ LOGO 注入 ============
+const OWL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="152.46 10.78 412.07 408.49">
+  <defs>
+    <style>
+      .ow-bk{fill:#0a0a0a;}
+      .ow-wt{fill:#fff;}
+      .ow-rd{fill:#d7502a;}
+      .ow-yl{fill:#e8d542;}
+      .ow-gr{fill:#1a7d48;}
+    </style>
+  </defs>
+  <g>
+    <path class="ow-gr" d="m506.50076,196.85646c-12.93932,12.68151-30.64111,20.52092-50.14685,20.52092-39.53394,0-71.69695-32.16301-71.69695-71.69695,0-19.50574,7.83941-37.20753,20.52092-50.14685,17.41353-12.84844,32.92505-30.66722,32.92505-44.66385,0-20.20502,11.95-31.4865,29.34859-31.4865s31.48648,11.28148,31.48648,31.4865c0,13.99664,15.51153,31.81541,32.92505,44.66385,12.68151,12.93932,20.52093,30.64111,20.52093,50.14685,0,39.53394-32.16301,71.69695-71.69695,71.69695-19.50574,0-37.20753-7.83941-50.14685-20.52092-12.84844,17.41353-30.66722,32.92505-44.66385,32.92505-20.20502,0-31.48649-11.95-31.48649-29.34859s11.28148-31.48648,31.48649-31.48648c13.99664,0,31.81541-15.51153,44.66385-32.92505" stroke-width="0" style="fill:#1a7d48"/>
+  </g>
+</svg>`;
+
+// 上面是简化占位（实际LOGO太长不便嵌入），用iframe方式加载SVG文件更稳
+// 直接用 fetch 加载真实svg
+function mountOwl(){
+  const mount = document.getElementById('owlMount');
+  if(!mount) return;
+  mount.innerHTML = INLINE_LOGO_SVG;
+}
+mountOwl();
+
+// LOGO入场后开始浮动
+setTimeout(()=>{
+  const w = document.querySelector('.owl-wrap');
+  if(w) w.classList.add('floating');
+}, 2900);
+
+// ============ 多语言 ============
+const i18n = {
+  zh:{
+    eyebrow:'TIBET · LHASA · EST. 2023',
+    tagline:'古老的藏文化 · 与当代设计的相遇',
+    taglineZh:'从图腾纹样到国际舞台 · 让文化在设计中呼吸',
+    footLeft:'西藏 · 拉萨',
+    footRight:'设计工作室',
+    scroll:'向下滑动',
+    teamTib:'[ 藏文：团队介绍 待译 ]',
+    tocTib:'[ 藏文：目录 待译 ]',
+    ch1Tib:'[ 藏文：常规设计业务 待译 ]',
+    ch2Tib:'[ 藏文：文创制作 待译 ]',
+    ch3Tib:'[ 藏文：联系方式 待译 ]',
+    endLine1:'西艺创意设计 · 西藏 · 拉萨',
+  },
+  bo:{
+    eyebrow:'བོད་ · ལྷ་ས་ · 2023',
+    tagline:'[ Tibetan tagline pending ]',
+    taglineZh:'[ ཡིག་སྒྱུར་སྒུག་བཞིན། ]',
+    footLeft:'བོད་ · ལྷ་ས་',
+    footRight:'Design Studio',
+    scroll:'scroll',
+    teamTib:'[ ཡིག་སྒྱུར་སྒུག་བཞིན། ]',
+    tocTib:'[ ཡིག་སྒྱུར་སྒུག་བཞིན། ]',
+    ch1Tib:'[ ཡིག་སྒྱུར་སྒུག་བཞིན། ]',
+    ch2Tib:'[ ཡིག་སྒྱུར་སྒུག་བཞིན། ]',
+    ch3Tib:'[ ཡིག་སྒྱུར་སྒུག་བཞིན། ]',
+    endLine1:'XIYI STUDIO · TIBET · LHASA',
+  },
+  en:{
+    eyebrow:'TIBET · LHASA · EST. 2023',
+    tagline:'Where ancient Tibetan culture meets contemporary design vision.',
+    taglineZh:'From sacred patterns to the global stage — design that breathes.',
+    footLeft:'tibet · lhasa',
+    footRight:'Design Studio',
+    scroll:'scroll',
+    teamTib:'[ Tibetan team title pending ]',
+    tocTib:'[ Tibetan contents title pending ]',
+    ch1Tib:'[ Tibetan general business title pending ]',
+    ch2Tib:'[ Tibetan cultural products title pending ]',
+    ch3Tib:'[ Tibetan contact title pending ]',
+    endLine1:'XIYI STUDIO · TIBET · LHASA',
+  }
+};
+
+const switchLang = (lang)=>{
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang] && i18n[lang][key]){
+      el.innerHTML = i18n[lang][key];
+    }
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : (lang === 'bo' ? 'bo' : 'en');
+  const notice = document.getElementById('langNotice');
+  if(notice){
+    notice.classList.toggle('show', lang === 'bo');
+  }
+};
+
+document.querySelectorAll('#langSwitch button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#langSwitch button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    switchLang(btn.dataset.lang);
+  });
+});
+
+// ============ 单页滚动渐入 ============
+const pageObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      // 章节封面页：再标记一次为 entered，触发幕布出场
+      if(e.target.classList.contains('page-feature')){
+        // 延迟一下，让滚动到位再开始
+        setTimeout(()=>{
+          e.target.classList.add('entered');
+        }, 100);
+      }
+      pageObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.15, rootMargin:'0px 0px -8% 0px'});
+
+document.querySelectorAll('.page').forEach(p=>pageObserver.observe(p));
+
+// ============ 顶部进度条 + 页码计数 + 章节名 ============
+const topProgress = document.getElementById('topProgress');
+const pcCurrent = document.getElementById('pcCurrent');
+const pageCounter = document.getElementById('pageCounter');
+const chapName = document.getElementById('chapName');
+const topbar = document.getElementById('topbar');
+const dotNav = document.querySelector('.dot-nav');
+
+const allPages = Array.from(document.querySelectorAll('.page'));
+const allChapters = Array.from(document.querySelectorAll('.chapter'));
+const heroEl = document.getElementById('hero');
+
+let lastScroll = 0;
+let ticking = false;
+
+function updateScrollUI(){
+  const sy = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = Math.min(100, Math.max(0, (sy/docH)*100));
+
+  // 顶部进度
+  if(topProgress) topProgress.style.width = pct + '%';
+
+  // 页码：当前哪一页（找在屏幕中央以上的最后一个page）
+  const center = sy + window.innerHeight * 0.4;
+  let curPage = null;
+  for(const p of allPages){
+    const top = p.offsetTop;
+    if(top < center){
+      curPage = p;
+    } else break;
+  }
+  if(curPage){
+    const num = curPage.dataset.page || '';
+    if(pcCurrent) pcCurrent.textContent = num;
+  }
+
+  // 章节名
+  let curChap = null;
+  for(const c of allChapters){
+    if(c.offsetTop < center) curChap = c; else break;
+  }
+  if(curChap && chapName){
+    const zh = curChap.dataset.chapZh || '';
+    chapName.textContent = zh;
+  } else if(chapName){
+    chapName.textContent = 'tibet · lhasa';
+  }
+
+  // 进入册子区后显示页码、底部计数、右侧导航
+  const heroBottom = heroEl.offsetTop + heroEl.offsetHeight;
+  const inBooklet = sy > heroBottom - window.innerHeight * 0.6;
+  pageCounter && pageCounter.classList.toggle('show', inBooklet);
+  dotNav && dotNav.classList.toggle('show', inBooklet);
+
+  // 顶栏：在首屏顶部时透明，进入册子区后高亮；下滑时隐藏，上滑时显示
+  if(topbar){
+    if(sy > 100 && sy > lastScroll + 8){
+      topbar.classList.add('hidden');
+    } else if(sy < lastScroll - 4 || sy < 60){
+      topbar.classList.remove('hidden');
+    }
+  }
+
+  // 锚点导航激活态
+  document.querySelectorAll('.dot-link').forEach(link=>{
+    const id = link.dataset.target;
+    const el = document.getElementById(id);
+    if(!el) return;
+    const r = el.getBoundingClientRect();
+    const inView = r.top < window.innerHeight*0.5 && r.bottom > window.innerHeight*0.4;
+    link.classList.toggle('active', inView);
+  });
+
+  lastScroll = sy;
+  ticking = false;
+}
+
+window.addEventListener('scroll', ()=>{
+  if(!ticking){
+    requestAnimationFrame(updateScrollUI);
+    ticking = true;
+  }
+}, {passive:true});
+
+updateScrollUI();
+
+// ============ 平滑跳转章节 ============
+document.querySelectorAll('.dot-link').forEach(link=>{
+  link.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+    const id = link.dataset.target;
+    const el = document.getElementById(id);
+    if(el){
+      const top = el.offsetTop - 60;
+      window.scrollTo({top:top, behavior:'smooth'});
+    }
+  });
+});
+
+// 阻止缩放手势在iOS上的抖动
+document.addEventListener('gesturestart', e => e.preventDefault());
+
+})();
+
+</script>
+</body>
+</html>
